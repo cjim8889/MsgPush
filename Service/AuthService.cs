@@ -11,21 +11,22 @@ namespace MsgPush.Service
         bool ContainsKey(string key);
         bool Authenticate(string key, string challengeCode);
         void RemoveKey(string key);
+        void New(string key);
     }
 
     public class AuthService : IAuthService
     {
-        private readonly Dictionary<string, (string, long)> vault;
+        private readonly Dictionary<string, string> vault;
 
         public AuthService()
         {
-            vault = new Dictionary<string, (string, long)>();
+            vault = new Dictionary<string, string>();
         }
         public bool Authenticate(string key, string challengeCode)
         {
             if (ContainsKey(key))
             {
-                if (vault.GetValueOrDefault(key).Item1 == challengeCode)
+                if (vault.GetValueOrDefault(key) == challengeCode)
                 {
                     RemoveKey(key);
                     return true;
@@ -43,6 +44,18 @@ namespace MsgPush.Service
         public void RemoveKey(string key)
         {
             vault.Remove(key);
+        }
+
+        public void New(string key)
+        {
+            vault.Add(key, GenerateChallengeCode());
+        }
+
+        private string GenerateChallengeCode()
+        {
+            var random = new Random();
+
+            return random.Next(100000, 1000000).ToString();
         }
     }
 }

@@ -154,7 +154,13 @@ namespace MsgPush.Service
             return updateResult.IsAcknowledged;
         }
 
+        public async Task<bool> SetUserValidationAsync(string id, bool state)
+        {
+            var update = Builders<User>.Update.Set("Validated", state);
+            var updateResult = await users.UpdateOneAsync(x => x.Id == id, update);
 
+            return updateResult.IsAcknowledged;
+        }
 
         public async Task<User> GetUserByIdAsync(string id)
         {
@@ -204,17 +210,7 @@ namespace MsgPush.Service
                 return false;
             }
 
-            try
-            {
-                return Regex.IsMatch(Username,
-                    @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                    @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
-                    RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
-            }
-            catch (RegexMatchTimeoutException)
-            {
-                return false;
-            }
+            return true;
         }
         private bool ValidatePassword(string password)
         {

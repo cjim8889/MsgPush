@@ -67,8 +67,11 @@ namespace MsgPush
 
             services.AddSingleton<DatabaseContext>();
             services.AddSingleton<RecaptchaService>();
+            services.AddSingleton<IAuthService, AuthService>();
+
 
             services.AddScoped<UserService>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
