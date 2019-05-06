@@ -65,7 +65,7 @@ namespace MsgPush.Service
         {
             var claims = GenerateClaims(user);
                        
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("Jwt:SecretKey").Value));
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration.GetSection("Jwt_SecretKey").Value));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -98,7 +98,7 @@ namespace MsgPush.Service
 
             AddRolesToClaims(claims, user.Roles);
 
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim(ClaimTypes.Name, user.Username));
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
             return claims;
@@ -166,14 +166,14 @@ namespace MsgPush.Service
             return await users.Find(x => x.AdminToken == adminToken).FirstOrDefaultAsync();
         }
 
-        public async Task<User> GetUserByEmailAndPasswordAsync(string email, string password)
+        public async Task<User> GetUserByUsernameAndPasswordAsync(string username, string password)
         {
-            return await users.Find(x => x.Email == email & x.Password == HashString(password)).FirstOrDefaultAsync();
+            return await users.Find(x => x.Username == username & x.Password == HashString(password)).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> IsEmailExistsAsync(string email)
+        public async Task<bool> IsUsernameExistsAsync(string Username)
         {
-            var user = await users.Find(x => x.Email == email).FirstOrDefaultAsync();
+            var user = await users.Find(x => x.Username == Username).FirstOrDefaultAsync();
 
             return user != null;
         }
@@ -194,19 +194,19 @@ namespace MsgPush.Service
 
         public bool ValidateUserData(User user)
         {
-            return ValidatePassword(user.Password) & ValidateEmail(user.Email);
+            return ValidatePassword(user.Password) & ValidateUsername(user.Username);
         }
 
-        private bool ValidateEmail(string email)
+        private bool ValidateUsername(string Username)
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(Username))
             {
                 return false;
             }
 
             try
             {
-                return Regex.IsMatch(email,
+                return Regex.IsMatch(Username,
                     @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                     @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
                     RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));

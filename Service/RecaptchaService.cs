@@ -34,7 +34,7 @@ namespace MsgPush.Service
         private readonly HttpClient client;
         public RecaptchaService(IConfiguration configuration)
         {
-            secretKey = configuration.GetSection("Recaptcha:SecretKey").Value;
+            secretKey = configuration.GetSection("Recaptcha_SecretKey").Value;
             url = configuration.GetSection("Recaptcha:Url").Value;
             client = new HttpClient();
         }

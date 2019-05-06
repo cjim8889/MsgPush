@@ -20,7 +20,7 @@ namespace MsgPush.Controller
     {
         public class UserDTO
         {
-            public string Email { get; set; }
+            public string Username { get; set; }
             public string Password { get; set; }
             public string RecaptchaToken {get; set;}
         }
@@ -59,24 +59,24 @@ namespace MsgPush.Controller
             if (!isAdmin) {
                 if (string.IsNullOrWhiteSpace(userDTO.RecaptchaToken))
                 {
-                    return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.EmptyRecaptchaToken, Message = "Empty Captcha Token"});
+                    return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.EmptyRecaptchaToken, Message = ResponseMessage.EmptyRecaptchaToken});
                 }
 
                 if (!await recaptchaService.Authenticate(userDTO.RecaptchaToken))
                 {
-                    return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidRecaptchaToken, Message = "Invalid Captcha Token" });
+                    return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidRecaptchaToken, Message = ResponseMessage.InvalidRecaptchaToken });
                 }
             }
-            var user = new User() { Email = userDTO.Email, Password = userDTO.Password };
+            var user = new User() { Username = userDTO.Username, Password = userDTO.Password };
 
             if (!userService.ValidateUserData(user))
             {
-                return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidEmailOrPassword, Message = "Invalid Email Or Password" });
+                return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidUsernameOrPassword, Message = ResponseMessage.InvalidUsernameOrPassword });
             }
 
-            if (await userService.IsEmailExistsAsync(user.Email))
+            if (await userService.IsUsernameExistsAsync(user.Username))
             {
-                return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.DuplicateEmail, Message = "Duplicate email address" });
+                return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.DuplicateUsername, Message = ResponseMessage.DuplicateUsername });
             }
 
 
@@ -213,24 +213,24 @@ namespace MsgPush.Controller
 
             return user != null
                 ? Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success, Message = userService.GenerateJwtToken(user, DateTime.Now.AddHours(1))})
-                : (ActionResult)BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidAdminToken, Message = "Invalid Admin Token" });
+                : (ActionResult)BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidAdminToken, Message = ResponseMessage.InvalidAdminToken});
         }
 
         //[EnableCors("AllowAny")]
         [AllowAnonymous]
         [HttpGet("login")]
-        public async Task<ActionResult> LogIn([FromQuery] string email, [FromQuery] string password)
+        public async Task<ActionResult> LogIn([FromQuery] string username, [FromQuery] string password)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
-                return BadRequest();
+                return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidUsernameOrPassword, Message = ResponseMessage.EmptyUsernameOrPassword});
             }
 
-            var user = await userService.GetUserByEmailAndPasswordAsync(email, password);
+            var user = await userService.GetUserByUsernameAndPasswordAsync(username, password);
 
             return user != null
                 ? Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success, Message = userService.GenerateJwtToken(user, DateTime.Now.AddHours(1)) })
-                : (ActionResult)BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidEmailOrPassword, Message = "Invalid Email Or Password" });
+                : (ActionResult)BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidUsernameOrPassword, Message = ResponseMessage.InvalidUsernameOrPassword });
         }
 
 

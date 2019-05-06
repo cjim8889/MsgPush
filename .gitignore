@@ -232,3 +232,7 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Vscode
+.vscode/
+docker-compose.yml

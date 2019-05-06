@@ -15,9 +15,21 @@ namespace MsgPush.Model
     {
         InvalidAdminToken = 1,
         Success = 2,
-        InvalidEmailOrPassword = 3,
-        DuplicateEmail = 4,
+        InvalidUsernameOrPassword = 3,
+        DuplicateUsername = 4,
         InvalidRecaptchaToken = 5,
-        EmptyRecaptchaToken = 6
+        EmptyRecaptchaToken = 6,
+        EmptyUsernameOrPassword = 7
+    }
+
+    public static class ResponseMessage
+    {
+        public static string InvalidAdminToken = "Invalid Admin Token"; 
+        public static string EmptyUsernameOrPassword = "Empty Password or Username";
+        public static string InvalidUsernameOrPassword = "Invalid Username Or Password";
+        public static string DuplicateUsername = "Duplicate Username";
+
+        public static string InvalidRecaptchaToken = "Invalid Captcha Token";
+        public static string EmptyRecaptchaToken = "Empty Captcha Token";
     }
 }

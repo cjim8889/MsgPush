@@ -41,8 +41,8 @@ namespace MsgPush.Model
         [BsonElement("Password")]
         public string Password { get; set; }
 
-        [BsonElement("Email")]
-        public string Email { get; set; }
+        [BsonElement("Username")]
+        public string Username { get; set; }
 
         [BsonElement("Subscribers")]
         public List<int> Subscribers { get; set; }
