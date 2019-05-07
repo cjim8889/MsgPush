@@ -48,7 +48,10 @@ namespace MsgPush.Service
 
         public void New(string key)
         {
-            vault.Add(key, GenerateChallengeCode());
+            var code = GenerateChallengeCode();
+            Console.WriteLine(code);
+            
+            vault.Add(key, code);
         }
 
         private string GenerateChallengeCode()
