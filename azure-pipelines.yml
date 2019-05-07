@@ -20,3 +20,4 @@ steps:
     docker build -t $(dockerId)/$(imageName) .
     docker login -u $(dockerId) -p $(dockerHubPwd)
     docker push $(dockerId)/$(imageName)
+  displayName: 'docker image build and publish'
