@@ -22,5 +22,7 @@ steps:
 - task: SSH@0
   inputs:
     sshEndpoint: 'deployServer'
-    runOptions: 'script'
-    scriptPath: '/root/deploy/deploy.sh'
+    runOptions: 'inline'
+    inline: |
+      cd ~/deploy
+      ./deploy.sh
