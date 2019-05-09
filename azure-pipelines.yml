@@ -13,17 +13,17 @@ variables:
 - group: 'msgPush'
 
 steps:
-- script: |
-    docker build -t $(dockerId)/$(imageName) .
-    docker login -u $(dockerId) -p $(dockerHubPwd)
-    docker push $(dockerId)/$(imageName)
-  displayName: 'docker image build and publish'
+# - script: |
+#     docker build -t $(dockerId)/$(imageName) .
+#     docker login -u $(dockerId) -p $(dockerHubPwd)
+#     docker push $(dockerId)/$(imageName)
+#   displayName: 'docker image build and publish'
 
 - task: SSH@0
   inputs:
     sshEndpoint: 'deployServer'
-    runOptions: 'inline'
-    inline: 'cd /root/deploy
+    runOptions: 'commands'
+    commands: 'cd /root/deploy
       export Jwt_SecretKey="$(Jwt_SecretKey)"
       docker-compose down
       docker-compose rm -f
