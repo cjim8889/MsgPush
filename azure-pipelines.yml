@@ -13,16 +13,14 @@ variables:
 - group: 'msgPush'
 
 steps:
-- script: |
-    docker build -t $(dockerId)/$(imageName) .
-    docker login -u $(dockerId) -p $(dockerHubPwd)
-    docker push $(dockerId)/$(imageName)
-  displayName: 'docker image build and publish'
+# - script: |
+#     docker build -t $(dockerId)/$(imageName) .
+#     docker login -u $(dockerId) -p $(dockerHubPwd)
+#     docker push $(dockerId)/$(imageName)
+#   displayName: 'docker image build and publish'
 
 - task: SSH@0
   inputs:
     sshEndpoint: 'deployServer'
-    runOptions: 'commands'
-    commands: |
-      cd ~/deploy
-      ./deploy.sh
+    runOptions: 'script'
+    scriptPath: '/root/deploy/deploy.sh'
