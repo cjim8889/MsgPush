@@ -24,8 +24,8 @@ steps:
     sshEndpoint: 'deployServer'
     runOptions: 'commands'
     commands: '
-      cd ~/deploy
-      export Jwt_SecretKey=\"$(Jwt_SecretKey)\"
-      docker-compose down
-      docker-compose rm -f
+      cd ~/deploy &&
+      export Jwt_SecretKey="$(Jwt_SecretKey)" &&
+      docker-compose down &&
+      docker-compose rm -f &&
       docker-compose up'
