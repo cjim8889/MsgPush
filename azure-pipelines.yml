@@ -19,3 +19,12 @@ steps:
     docker push $(dockerId)/$(imageName)
   displayName: 'docker image build and publish'
 
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'deployServer'
+    runOptions: 'inline'
+    inline: 'cd /root/deploy
+      export Jwt_SecretKey="$(Jwt_SecretKey)"
+      docker-compose down
+      docker-compose rm -f
+      docker-compose up'
