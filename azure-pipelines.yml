@@ -25,7 +25,7 @@ steps:
     runOptions: 'commands'
     commands: |
       cd ~/deploy
-      export Jwt_SecretKey="$(Jwt_SecretKey)"
+      export Jwt_SecretKey='$(Jwt_SecretKey)'
       docker-compose down
       docker-compose rm -f
       docker-compose up
