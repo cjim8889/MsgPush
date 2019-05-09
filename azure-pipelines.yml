@@ -21,3 +21,9 @@ steps:
     docker login -u $(dockerId) -p $(dockerHubPwd)
     docker push $(dockerId)/$(imageName)
   displayName: 'docker image build and publish'
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'deployServer'
+    runOptions: 'inline'
+    inline: 'echo "Azure" > az.txt'
