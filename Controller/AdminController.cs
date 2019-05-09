@@ -86,6 +86,12 @@ namespace MsgPush.Controller
             return CreatedAtAction("CreateUser", user);
         }
 
+        [HttpGet("testCd")]
+        public ActionResult TestCdPipeline()
+        {
+            return Ok(new {StatusCode="Very Good"});
+        }
+
 
     }
 }
