@@ -11,7 +11,7 @@ namespace MsgPush.Context
     {
         public DatabaseContext(IConfiguration configuration)
         {
-            Client = new MongoClient(configuration.GetSection("Mongo:ConnectionString").Value);
+            Client = new MongoClient(configuration.GetSection("Db_ConnectionString").Value);
             Database = Client.GetDatabase(configuration.GetSection("Mongo:Database").Value);
         }
 
