@@ -13,14 +13,14 @@ variables:
 - group: 'msgPush'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+# - script: dotnet build --configuration $(buildConfiguration)
+#   displayName: 'dotnet build $(buildConfiguration)'
   
-- script: |
-    docker build -t $(dockerId)/$(imageName) .
-    docker login -u $(dockerId) -p $(dockerHubPwd)
-    docker push $(dockerId)/$(imageName)
-  displayName: 'docker image build and publish'
+# - script: |
+#     docker build -t $(dockerId)/$(imageName) .
+#     docker login -u $(dockerId) -p $(dockerHubPwd)
+#     docker push $(dockerId)/$(imageName)
+#   displayName: 'docker image build and publish'
 
 - task: SSH@0
   inputs:
