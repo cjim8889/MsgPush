@@ -13,9 +13,6 @@ variables:
 - group: 'msgPush'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-  
 - script: |
     docker build -t $(dockerId)/$(imageName) .
     docker login -u $(dockerId) -p $(dockerHubPwd)
