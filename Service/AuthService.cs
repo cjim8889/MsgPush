@@ -49,7 +49,10 @@ namespace MsgPush.Service
         public void New(string key)
         {
             var code = GenerateChallengeCode();
-            Console.WriteLine(code);
+            
+            if (vault.ContainsKey(key)) {
+                RemoveKey(key);
+            }
             
             vault.Add(key, code);
         }
