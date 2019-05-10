@@ -24,7 +24,7 @@ namespace MsgPush.Controller
 
         [Authorize]
         [HttpGet("new")]
-        public ActionResult ValidationRequest(int receiverId)
+        public ActionResult ValidationRequest([FromQuery]long receiverId)
         {
             var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
