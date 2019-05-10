@@ -11,24 +11,25 @@ namespace MsgPush.Service
         bool ContainsKey(string key);
         bool Authenticate(string key, string challengeCode);
         void RemoveKey(string key);
-        void New(string key);
+        void New(string key, long subsriberId);
+
+        long GetSubsriberId(string key);
     }
 
     public class AuthService : IAuthService
     {
-        private readonly Dictionary<string, string> vault;
+        private readonly Dictionary<string, (string, long)> vault;
 
         public AuthService()
         {
-            vault = new Dictionary<string, string>();
+            vault = new Dictionary<string, (string, long)>();
         }
         public bool Authenticate(string key, string challengeCode)
         {
             if (ContainsKey(key))
             {
-                if (vault.GetValueOrDefault(key) == challengeCode)
+                if (vault.GetValueOrDefault(key).Item1 == challengeCode)
                 {
-                    RemoveKey(key);
                     return true;
                 }
             }
@@ -36,6 +37,10 @@ namespace MsgPush.Service
             return false;
         }
 
+        public long GetSubsriberId(string key)
+        {
+            return vault.GetValueOrDefault(key).Item2;
+        }
         public bool ContainsKey(string key)
         {
             return vault.ContainsKey(key);
@@ -46,15 +51,16 @@ namespace MsgPush.Service
             vault.Remove(key);
         }
 
-        public void New(string key)
+        public void New(string key, long subsriberId)
         {
             var code = GenerateChallengeCode();
             
-            if (vault.ContainsKey(key)) {
+            if (vault.ContainsKey(key)) 
+            {
                 RemoveKey(key);
             }
             
-            vault.Add(key, code);
+            vault.Add(key, (code, subsriberId));
         }
 
         private string GenerateChallengeCode()

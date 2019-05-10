@@ -126,6 +126,14 @@ namespace MsgPush.Service
             return null;
         }
 
+        public async Task<bool> AddSubsriberToUserAsync(string id, long subsriberId)
+        {
+            var update = Builders<User>.Update.AddToSet("Subsribers", subsriberId);
+            var result = await users.UpdateOneAsync(x => x.Id == id, update);
+
+            return result.IsAcknowledged;
+        }
+
         public async Task<bool> AddRoleToUserAsync(string id, string role)
         {
             return await AddRolesToUserAsync(id, new string[] { role });

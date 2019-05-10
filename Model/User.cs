@@ -19,7 +19,7 @@ namespace MsgPush.Model
         public User()
         {
             Validated = false;
-            Subscribers = new List<int>();
+            Subscribers = new List<long>();
             Roles = new HashSet<string>() { Role.Standard };
             RegisteredAt = DateTime.Now;
 
@@ -48,7 +48,7 @@ namespace MsgPush.Model
         public string Email { get; set; }
 
         [BsonElement("Subscribers")]
-        public List<int> Subscribers { get; set; }
+        public List<long> Subscribers { get; set; }
 
         [BsonElement("Validated")]
         public bool Validated { get; set; }

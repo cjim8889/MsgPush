@@ -28,7 +28,7 @@ namespace MsgPush.Controller
         {
             var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            authService.New(id);
+            authService.New(id, receiverId);
             
             return Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success });
         }
@@ -44,11 +44,12 @@ namespace MsgPush.Controller
                 return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidRecaptchaToken });
             }
         
-            await userService.SetUserValidationAsync(id, true);
+            // await userService.SetUserValidationAsync(id, true);
+            await userService.AddSubsriberToUserAsync(id, authService.GetSubsriberId(id));
+            authService.RemoveKey(id);
 
             return Ok();
         }
-
     }
 
 }
