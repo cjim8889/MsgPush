@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using MsgPush.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MsgPush.Service;
+using MsgPush.Model;
 
 namespace MsgPush
 {
@@ -68,9 +69,11 @@ namespace MsgPush
             services.AddSingleton<DatabaseContext>();
             services.AddSingleton<RecaptchaService>();
             services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<MqContext>();
 
 
             services.AddScoped<UserService>();
+            services.AddScoped<MqService>();
             
         }
 

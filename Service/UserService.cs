@@ -180,6 +180,11 @@ namespace MsgPush.Service
             return await users.Find(x => x.AdminToken == adminToken).FirstOrDefaultAsync();
         }
 
+        public async Task<User> GetUserByPushToken(string pushToken)
+        {
+            return await users.Find(x => x.PushToken == pushToken).FirstOrDefaultAsync();
+        }
+
         public async Task<User> GetUserByUsernameAndPasswordAsync(string username, string password)
         {
             return await users.Find(x => x.Username == username & x.Password == HashString(password)).FirstOrDefaultAsync();

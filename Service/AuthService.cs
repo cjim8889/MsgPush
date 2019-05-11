@@ -11,7 +11,7 @@ namespace MsgPush.Service
         bool ContainsKey(string key);
         bool Authenticate(string key, string challengeCode);
         void RemoveKey(string key);
-        void New(string key, long subsriberId);
+        string New(string key, long subsriberId);
 
         long GetSubsriberId(string key);
     }
@@ -51,7 +51,7 @@ namespace MsgPush.Service
             vault.Remove(key);
         }
 
-        public void New(string key, long subsriberId)
+        public string New(string key, long subsriberId)
         {
             var code = GenerateChallengeCode();
             
@@ -61,6 +61,8 @@ namespace MsgPush.Service
             }
             
             vault.Add(key, (code, subsriberId));
+
+            return code;
         }
 
         private string GenerateChallengeCode()

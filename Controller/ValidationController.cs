@@ -15,20 +15,23 @@ namespace MsgPush.Controller
     {
         private readonly UserService userService;
         private readonly IAuthService authService;
-        public ValidationController(UserService userService, IAuthService authService)
+        private readonly MqService mqService;
+        public ValidationController(UserService userService, IAuthService authService, MqService mqService)
         {
             this.userService = userService;
             this.authService = authService;
+            this.mqService = mqService;
         }
 
 
         [Authorize]
         [HttpGet("new")]
-        public ActionResult ValidationRequest([FromQuery]long receiverId)
+        public async Task<ActionResult> ValidationRequest([FromQuery]long receiverId)
         {
             var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
 
-            authService.New(id, receiverId);
+            var code = authService.New(id, receiverId);
+            await mqService.PushChallengeMessage(code, receiverId);
             
             return Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success });
         }
