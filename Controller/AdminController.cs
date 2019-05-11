@@ -11,8 +11,10 @@ using System.Security.Claims;
 
 namespace MsgPush.Controller
 {
+
+    [ApiVersion("1.0")]
     [Authorize(Roles = "Admin")]
-    [Route("api/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {

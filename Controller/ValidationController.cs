@@ -9,7 +9,10 @@ using System.Security.Claims;
 
 namespace MsgPush.Controller
 {
-    [Route("api/validate")]
+
+    [ApiVersion("1.0")]
+    [Authorize]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class ValidationController : ControllerBase
     {
@@ -24,7 +27,6 @@ namespace MsgPush.Controller
         }
 
 
-        [Authorize]
         [HttpGet("new")]
         public async Task<ActionResult> ValidationRequest([FromQuery]long receiverId)
         {
@@ -36,8 +38,7 @@ namespace MsgPush.Controller
             return Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success });
         }
 
-        [Authorize]
-        [HttpGet]
+        [HttpGet("validate")]
         public async Task<ActionResult> Validate(string challengeCode)
         {
             var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;

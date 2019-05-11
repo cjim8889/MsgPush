@@ -10,7 +10,8 @@ using System.Security.Claims;
 
 namespace MsgPush.Controller
 {
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {

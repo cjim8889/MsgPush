@@ -11,8 +11,9 @@ using System.Security.Claims;
 
 namespace MsgPush.Controller
 {
+    [ApiVersion("1.0")]
     [AllowAnonymous]
-    [Route("api/[controller]")]
+    [Route("v{version:apiVersion}/[controller]")]
     [ApiController]
     public class PushController : ControllerBase
     {

@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace MsgPush.Controller
 {
-    [Route("api/users")]
+    [ApiVersion("1.0")]
+    [Route("v{version:apiVersion}/users")]
     [ApiController]
-    public class LonginController : ControllerBase
+    public class LoginController : ControllerBase
     {
 
         private readonly UserService userService;
-        public LonginController(UserService userService)
+        public LoginController(UserService userService)
         {
             this.userService = userService;
         }
