@@ -128,7 +128,7 @@ namespace MsgPush.Service
 
         public async Task<bool> AddSubsriberToUserAsync(string id, long subsriberId)
         {
-            var update = Builders<User>.Update.AddToSet("Subsribers", subsriberId);
+            var update = Builders<User>.Update.AddToSet("Subscribers", subsriberId);
             var result = await users.UpdateOneAsync(x => x.Id == id, update);
 
             return result.IsAcknowledged;
