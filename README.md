@@ -5,7 +5,13 @@
 
 # Required ENV
 
-## Jwt_SecretKey
-## Recaptcha_SecretKey
-## SecretKey
-## Db_ConnectionString
+* Jwt_SecretKey
+* Recaptcha_SecretKey
+* SecretKey
+* Db_ConnectionString
+
+# 一键Docker部署
+
+```bash
+docker-compose up
+```
