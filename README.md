@@ -9,6 +9,7 @@
 * Recaptcha_SecretKey Google recaptcha 私钥
 * SecretKey 私钥
 * Db_ConnectionString Mongodb 数据库连接串 
+* Telegram_
 
 # 一键Docker部署
 
