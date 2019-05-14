@@ -235,5 +235,4 @@ _Pvt_Extensions
 
 # Vscode
 .vscode/
-docker-compose.yml
 run.sh

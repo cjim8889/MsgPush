@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  backend:
+    image: jimchen8889/telepush-backend:latest
+    build:
+      context: .
+      dockerfile: Backend/Dockerfile
+
+  api:
+    image: jimchen8889/telepush-api:latest
+    build:
+      context: .
+      dockerfile: Api/Dockerfile
+
