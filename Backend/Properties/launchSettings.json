@@ -1,7 +1,10 @@
 {
   "profiles": {
     "TelePush.Backend": {
-      "commandName": "Project",
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
     }
   }
 }
