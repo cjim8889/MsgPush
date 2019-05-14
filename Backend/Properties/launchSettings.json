@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "TelePush.Backend": {
+      "commandName": "Project",
+    }
+  }
+}
