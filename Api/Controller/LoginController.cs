@@ -28,7 +28,7 @@ namespace TelePush.Api.Controller
             var user = await userService.GetUserByAdminTokenAsync(adminToken);
 
             return user != null
-                ? Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success, Message = userService.GenerateJwtToken(user, DateTime.Now.AddHours(1))})
+                ? Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success, Message = userService.GenerateJwtToken(user, DateTime.Now.AddHours(24))})
                 : (ActionResult)BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidAdminToken, Message = ResponseMessage.InvalidAdminToken});
         }
 
@@ -44,7 +44,7 @@ namespace TelePush.Api.Controller
             var user = await userService.GetUserByUsernameAndPasswordAsync(username, password);
 
             return user != null
-                ? Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success, Message = userService.GenerateJwtToken(user, DateTime.Now.AddHours(1)) })
+                ? Ok(new ReturnMessage() { StatusCode = Model.StatusCode.Success, Message = userService.GenerateJwtToken(user, DateTime.Now.AddHours(24)) })
                 : (ActionResult)BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidUsernameOrPassword, Message = ResponseMessage.InvalidUsernameOrPassword });
         }
     }

@@ -35,9 +35,9 @@ namespace TelePush.Backend.Model
             return new TextResponse() { ResponseText = response };
         }
 
-        public static PhotoResponse NewPhotoResponse(string url)
+        public static PhotoResponse NewPhotoResponse(string id)
         {
-            return new PhotoResponse() { Url = url };
+            return new PhotoResponse() { PhotoIdentifier = id };
         }
     }
 
@@ -56,11 +56,11 @@ namespace TelePush.Backend.Model
     {
 
         public override long ChatId { get; set; }
-        public string Url { get; set; }
+        public string PhotoIdentifier { get; set; }
 
         public override async void SendResponse(TelegramContext telegramContext)
         {
-            await telegramContext.SendPhotoMessage(Url, ChatId);
+            await telegramContext.SendPhotoMessage(PhotoIdentifier, ChatId);
         }
     }
 }

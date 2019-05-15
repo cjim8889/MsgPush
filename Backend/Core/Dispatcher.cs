@@ -45,9 +45,11 @@ namespace TelePush.Backend.Core
 
             switch (paramsLength)
             {
+                //0 parameter
                 case 0:
                     parameters = new object[0];
                     break;
+                //1 parameter which defaults to type Message
                 case 1:
                     parameters = new object[] { parameters[0] };
                     break;
@@ -60,6 +62,7 @@ namespace TelePush.Backend.Core
 
             var response = (AbstractResponse)method.MethodInfo.Invoke(target, parameters);
 
+            //Return if the resposne type if void
             if (response.GetType() == typeof(void))
             {
                 return;

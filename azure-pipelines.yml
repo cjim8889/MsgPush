@@ -15,6 +15,6 @@ variables:
 steps:
 - script: |
     docker login -u $(dockerId) -p $(dockerHubPwd)
-    docker-compose build
+    docker-compose build -f docker-compose-build.yml
     docker-compose push
   displayName: 'docker image build and publish'

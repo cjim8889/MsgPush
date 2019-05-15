@@ -1,7 +1,10 @@
 {
   "profiles": {
     "TelePush.Backend": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "environmentVariables": {
+        "Telegram_Token": "719125238:AAFmX0kZ-mRlCU3AkRJeU8zNMHG7ItWVWJM"
+      }
     },
     "Docker": {
       "commandName": "Docker"

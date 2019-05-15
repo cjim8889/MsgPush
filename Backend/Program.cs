@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using TelePush.Backend.Context;
 using TelePush.Backend.Core;
@@ -17,14 +19,16 @@ namespace TelePush.Backend
                 .AddEnvironmentVariables();
 
             var configuration = builder.Build();
+            Console.WriteLine("Configuration Loaded");
 
             Factory.AddDependency<IConfiguration>(configuration);
             Factory.AddDependency<TelegramContext>();
             Factory.AddDependency<Dispatcher>();
             //Factory.AddDependency<MqContext>();
+            Console.WriteLine("Denpendencies injected");
 
             var server = Factory.InstantiateServer();
-
+            Console.WriteLine("Server instance instantiated\nRunning...");
             server.Run();
 
         }

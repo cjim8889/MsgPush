@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using TelePush.Api.Service;
 using TelePush.Api.Model;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
 
 
 namespace TelePush.Api.Controller

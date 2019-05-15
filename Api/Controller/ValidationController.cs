@@ -48,7 +48,6 @@ namespace TelePush.Api.Controller
                 return BadRequest(new ReturnMessage() { StatusCode = Model.StatusCode.InvalidRecaptchaToken });
             }
         
-            // await userService.SetUserValidationAsync(id, true);
             await userService.AddSubsriberToUserAsync(id, authService.GetSubsriberId(id));
             authService.RemoveKey(id);
 

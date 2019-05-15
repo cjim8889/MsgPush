@@ -29,7 +29,7 @@ namespace TelePush.Backend.Controller
         }
 
 
-        [Command("wocao")]
+        [Command("hello")]
         public IResponse wocao()
         {
             return ResponseFactory.NewPhotoResponse("https://images.unsplash.com/photo-1557820178-20186da06935?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=927&q=80");
