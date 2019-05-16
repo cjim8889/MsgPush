@@ -27,16 +27,16 @@ namespace TelePush.Backend
         private readonly Dispatcher dispatcher;
         private readonly HookService hookService;
 
-        public Server(IConfiguration configuration, TelegramContext telegramContext, Dispatcher dispatcher, HookService hookService)
+        public Server(IConfiguration configuration, TelegramContext telegramContext, Dispatcher dispatcher, HookService hookService, MqContext mqContext)
         {
             this.configuration = configuration;
             this.telegramContext = telegramContext;
             this.dispatcher = dispatcher;
             this.hookService = hookService;
+            this.mqContext = mqContext;
 
-            //this.mqContext = mqContext;
-            //mqConsumer = CreateEventConsumer();
-            //mqConsumer.Received += OnMqMessageReceived;
+            mqConsumer = CreateEventConsumer();
+            mqConsumer.Received += OnMqMessageReceived;
         }
 
         public void AddControllers<I>()
@@ -90,7 +90,7 @@ namespace TelePush.Backend
         public void Run()
         {
             var tasks = new List<Task>();
-            //tasks.Add(Task.Run(() => mqContext.Channel.BasicConsume(queue: configuration.GetSection("Mq:Key").Value, autoAck: true, consumer: mqConsumer)));
+            tasks.Add(Task.Run(() => mqContext.Channel.BasicConsume(queue: configuration.GetSection("Mq:Key").Value, autoAck: true, consumer: mqConsumer)));
             tasks.Add(Task.Run(() =>
             {
                 telegramContext.TelegramBotClient.StartReceiving();

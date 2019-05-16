@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Backend.Service
 {
@@ -26,10 +27,9 @@ namespace Backend.Service
             return hooksTable.GetValueOrDefault(messageId);
         }
 
-        public async void InvokeHook(int messageId, string message)
+        public async Task InvokeHook(int messageId, string message)
         {
-            //var hook = GetHook(messageId);
-            var hook = "http://localhost:5000/test";
+            var hook = GetHook(messageId);
             if (hook == null)
             {
                 return;
@@ -41,8 +41,7 @@ namespace Backend.Service
             });
 
 
-            var response = await httpClient.PostAsync(hook, formData);
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
+            await httpClient.PostAsync(hook, formData);
         }
     }
 }

@@ -52,12 +52,9 @@ namespace TelePush.Backend.Controller
         }
 
         [Type(Core.DispatcherType.Reply)]
-        public void ReplyHandler(Message message)
+        public async void ReplyHandler(Message message)
         {
-
-
-            hookService.InvokeHook(1234, message.Text);
-
+            await hookService.InvokeHook(message.ReplyToMessage.MessageId, message.Text);
         }
 
     }
