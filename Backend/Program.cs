@@ -22,11 +22,11 @@ namespace TelePush.Backend
             var configuration = builder.Build();
             Console.WriteLine("Configuration Loaded");
 
+            Factory.AddDependency<MqContext>();
             Factory.AddDependency<HookService>();
             Factory.AddDependency<IConfiguration>(configuration);
             Factory.AddDependency<TelegramContext>();
             Factory.AddDependency<Dispatcher>();
-            //Factory.AddDependency<MqContext>();
             Console.WriteLine("Denpendencies injected");
 
             var server = Factory.InstantiateServer();
