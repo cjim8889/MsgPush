@@ -14,5 +14,5 @@
 # 一键Docker部署
 
 ```bash
-docker-compose up
+removed
 ```
