@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Backend.Service;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,8 +17,10 @@ namespace TelePush.Backend.Controller
     {
         private readonly IConfiguration configuration;
         private readonly TelegramContext telegramContext;
-        public MainController(TelegramContext telegramContext, IConfiguration configuration)
+        private readonly HookService hookService;
+        public MainController(TelegramContext telegramContext, IConfiguration configuration, HookService hookService)
         {
+            this.hookService = hookService;
             this.configuration = configuration;
             this.telegramContext = telegramContext;
         }
@@ -47,5 +50,15 @@ namespace TelePush.Backend.Controller
             Console.WriteLine(message.Photo[0].FileId);
             return ResponseFactory.NewPhotoResponse(message.Photo[0].FileId);
         }
+
+        [Type(Core.DispatcherType.Reply)]
+        public void ReplyHandler(Message message)
+        {
+
+
+            hookService.InvokeHook(1234, message.Text);
+
+        }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using TelePush.Backend.Context;
 
 namespace TelePush.Backend.Model
@@ -8,12 +9,12 @@ namespace TelePush.Backend.Model
 
     interface IResponse
     {
-        void SendResponse(TelegramContext telegramContext);
+        Task SendResponse(TelegramContext telegramContext);
     }
 
     abstract class AbstractResponse : IResponse
     {
-        public abstract void SendResponse(TelegramContext telegramContext);
+        public abstract Task SendResponse(TelegramContext telegramContext);
         public abstract long ChatId { get; set; }
 
         public AbstractResponse()
@@ -46,9 +47,9 @@ namespace TelePush.Backend.Model
         public string ResponseText { get; set; }
         public override long ChatId { get; set; }
 
-        public override async void SendResponse(TelegramContext telegramContext)
+        public override Task SendResponse(TelegramContext telegramContext)
         {
-            await telegramContext.SendTextMessage(ResponseText, ChatId);
+            return telegramContext.SendTextMessage(ResponseText, ChatId);
         }
     }
 
@@ -58,9 +59,9 @@ namespace TelePush.Backend.Model
         public override long ChatId { get; set; }
         public string PhotoIdentifier { get; set; }
 
-        public override async void SendResponse(TelegramContext telegramContext)
+        public override Task SendResponse(TelegramContext telegramContext)
         {
-            await telegramContext.SendPhotoMessage(PhotoIdentifier, ChatId);
+            return telegramContext.SendPhotoMessage(PhotoIdentifier, ChatId);
         }
     }
 }

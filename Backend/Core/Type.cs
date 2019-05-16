@@ -30,6 +30,7 @@
         MigratedToSupergroup = 25,
         MigratedFromGroup = 26,
         Animation = 27,
-        Any = 28
+        Any = 28,
+        Reply = 29
     }
 }

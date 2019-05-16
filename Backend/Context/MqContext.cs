@@ -4,7 +4,12 @@ using RabbitMQ.Client;
 
 namespace TelePush.Backend.Context
 {
-    
+    public static class MqMessageType
+    {
+        public const string Message = "Message";
+        public const string HookAction = "HookAction";
+    }
+
     class MqContext
     {
 
@@ -21,6 +26,7 @@ namespace TelePush.Backend.Context
                                     exclusive: false,
                                     autoDelete: false,
                                     arguments: null);
+
         }
 
         ~MqContext()

@@ -57,5 +57,8 @@ namespace TelePush.Api.Model
         public DateTime RegisteredAt { get; set; }
         [BsonElement("Roles")]
         public HashSet<string> Roles { get; set; }
+
+        [BsonElement("Hook")]
+        public string Hook { get; set; }
     }
 }

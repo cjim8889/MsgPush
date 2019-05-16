@@ -6,5 +6,6 @@ namespace TelePush.Api.Model
     {
         public string Content { get; set; }
         public List<long> Receivers { get; set; }
+        public string Hook { get; set; }
     }
 }

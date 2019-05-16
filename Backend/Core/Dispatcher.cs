@@ -20,20 +20,20 @@ namespace TelePush.Backend.Core
     class Dispatcher
     {
         private IList<Method> methods;
-        public delegate void MessageEventHandler(Message message);
+        public delegate Task MessageEventHandler(Message message);
 
         private readonly TelegramContext telegramContext;
         public Dispatcher(TelegramContext telegramContext)
         {
             this.telegramContext = telegramContext;
-            this.telegramContext.OnMessage += new MessageEventHandler(Dispatch);
+            this.telegramContext.OnMessage += new MessageEventHandler(DispatchAsync);
             methods = new List<Method>();
         }
 
         //Always dispatch to the first method that fits
         //Controllers are singleton
         //Pattern matching to be implemented
-        public void Dispatch(Message message)
+        public async Task DispatchAsync(Message message)
         {
             var (method, parameters) = SelectProcedure(message);
             if (method == null)
@@ -63,7 +63,7 @@ namespace TelePush.Backend.Core
             var response = (AbstractResponse)method.MethodInfo.Invoke(target, parameters);
 
             //Return if the resposne type if void
-            if (response.GetType() == typeof(void))
+            if (response == null)
             {
                 return;
             }
@@ -73,13 +73,17 @@ namespace TelePush.Backend.Core
             //Auto append chatid if null
             response.ChatId = response.ChatId == 0 ? message.Chat.Id : response.ChatId;
 
-
-            Task.Run(() => { response.SendResponse(telegramContext); });
+            await response.SendResponse(telegramContext);
         }
 
         private (Method, object[]) SelectProcedure(Message message)
         {
             var type = (DispatcherType)message.Type;
+
+            if (message.ReplyToMessage != null)
+            {
+                return (methods.Where(m => m.Type == DispatcherType.Reply).FirstOrDefault(), new object[] { message });
+            }
 
             if (type == DispatcherType.Text)
             {
@@ -96,6 +100,7 @@ namespace TelePush.Backend.Core
                     return (methods.Where(m => m.Command == messageSplit[0]).FirstOrDefault(), new object[] { message, commandParams });
                 }
             }
+
 
             return (methods.Where(m => (m.Type == type || m.Type == DispatcherType.Any) && !m.IsCommand).FirstOrDefault(), new[] { message });
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Backend.Service;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -15,7 +16,7 @@ using TelePush.Backend.Utility;
 
 namespace TelePush.Backend
 {
-    class TelegramServer
+    class Server
     {
         //Can not have multiple dependencies with the same type signature (at the moment);
 
@@ -24,12 +25,14 @@ namespace TelePush.Backend
         private readonly TelegramContext telegramContext;
         private readonly EventingBasicConsumer mqConsumer;
         private readonly Dispatcher dispatcher;
+        private readonly HookService hookService;
 
-        public TelegramServer(IConfiguration configuration, TelegramContext telegramContext, Dispatcher dispatcher)
+        public Server(IConfiguration configuration, TelegramContext telegramContext, Dispatcher dispatcher, HookService hookService)
         {
             this.configuration = configuration;
             this.telegramContext = telegramContext;
             this.dispatcher = dispatcher;
+            this.hookService = hookService;
 
             //this.mqContext = mqContext;
             //mqConsumer = CreateEventConsumer();
@@ -46,21 +49,42 @@ namespace TelePush.Backend
             return new EventingBasicConsumer(mqContext.Channel);
         }
 
-        private void OnMqMessageReceived(object model, BasicDeliverEventArgs ea)
+        private async Task HandleMessagePush(BasicDeliverEventArgs ea)
         {
-            Console.WriteLine("Message Received from Mq");
             var body = ea.Body;
+
             var message = Encoding.UTF8.GetString(body);
             var messageObj = JsonConvert.DeserializeObject<MqMessage>(message);
 
-            var tasks = new List<Task>();
+            var tasks = new List<Task<Telegram.Bot.Types.Message>>();
 
             foreach (long receiverId in messageObj.Receivers)
             {
                 tasks.Add(telegramContext.SendTextMessage(messageObj.Content, receiverId));
             }
 
-            Task.WaitAll(tasks.ToArray());
+            await Task.WhenAll(tasks.ToArray());
+
+            if (!string.IsNullOrWhiteSpace(messageObj.Hook))
+            {
+                foreach (var task in tasks)
+                {
+                    var m = await task;
+                    hookService.AddHook(m.MessageId, messageObj.Hook);
+                }
+            }
+        }
+
+        private async void OnMqMessageReceived(object model, BasicDeliverEventArgs ea)
+        {
+            Console.WriteLine("Message Received from Mq");
+            
+            switch(ea.BasicProperties.Type)
+            {
+                case MqMessageType.Message:
+                    await HandleMessagePush(ea);
+                    break;
+            }
         }
 
         public void Run()

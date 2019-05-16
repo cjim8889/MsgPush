@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Backend.Service;
 using Microsoft.Extensions.Configuration;
 using TelePush.Backend.Context;
 using TelePush.Backend.Core;
@@ -21,6 +22,7 @@ namespace TelePush.Backend
             var configuration = builder.Build();
             Console.WriteLine("Configuration Loaded");
 
+            Factory.AddDependency<HookService>();
             Factory.AddDependency<IConfiguration>(configuration);
             Factory.AddDependency<TelegramContext>();
             Factory.AddDependency<Dispatcher>();

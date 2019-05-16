@@ -8,5 +8,6 @@ namespace TelePush.Backend.Model
     {
         public string Content { get; set; }
         public List<long> Receivers { get; set; }
+        public string Hook { get; set; }
     }
 }

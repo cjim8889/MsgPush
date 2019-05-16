@@ -59,9 +59,9 @@ namespace TelePush.Backend.Utility
             return InstanceInstantiate(typeof(T));
         }
 
-        public static TelegramServer InstantiateServer()
+        public static Server InstantiateServer()
         {
-            var server = (TelegramServer) InstanceInstantiate<TelegramServer>();
+            var server = (Server) InstanceInstantiate<Server>();
 
             server.AddControllers<IControllerBase>();
 

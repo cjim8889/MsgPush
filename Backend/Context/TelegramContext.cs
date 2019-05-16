@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Backend.Service;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -41,21 +42,24 @@ namespace TelePush.Backend.Context
         }
 
 
-        public async Task SendTextMessage(string message, long chatId)
+        public async Task<Telegram.Bot.Types.Message> SendTextMessage(string message, long chatId)
         {
             try
             {
-                await TelegramBotClient.SendTextMessageAsync(
+                var m = await TelegramBotClient.SendTextMessageAsync(
                   chatId: chatId,
                   text: message
                 );
 
-
                 Console.WriteLine($"Text Message Sent {chatId}");
+
+                return m;
             }
             catch(ChatNotFoundException e)
             {
                 Console.WriteLine($"Fail to find the chatId {chatId} {e.Message}");
+
+                return null;
             }           
         }
     }

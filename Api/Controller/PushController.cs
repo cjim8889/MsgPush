@@ -30,10 +30,8 @@ namespace TelePush.Api.Controller
                 return BadRequest();
             }
 
-            await mqService.PushMessage(message, user.Subscribers);
+            await mqService.PushMessage(message, user.Subscribers, user.Hook);
             return Ok(new ReturnMessage() { StatusCode=Model.StatusCode.Success });
         }
-
-
     }
 }
