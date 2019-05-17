@@ -13,6 +13,7 @@ namespace TelePush.Api.Service
     {
         public const string Message = "Message";
         public const string HookAction = "HookAction";
+        public const string HookValidation = "HookValidation";
     }
     public class MqService
     {

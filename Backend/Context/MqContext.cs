@@ -8,6 +8,7 @@ namespace TelePush.Backend.Context
     {
         public const string Message = "Message";
         public const string HookAction = "HookAction";
+        public const string HookValidation = "HookValidation";
     }
 
     class MqContext

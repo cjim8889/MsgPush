@@ -133,6 +133,14 @@ namespace TelePush.Api.Service
 
             return result.IsAcknowledged;
         }
+        
+        public async Task<bool> SetUserHookAsync(string id, string hook)
+        {
+            var update = Builders<User>.Update.Set("Hook", hook);
+            var result = await users.UpdateOneAsync(x => x.Id == id, update);
+
+            return result.IsAcknowledged;
+        }
 
         public async Task<bool> AddRoleToUserAsync(string id, string role)
         {

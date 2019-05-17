@@ -8,8 +8,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TelePush.Api.Service;
 
-namespace Api.Controller
+namespace TelePush.Api.Controller
 {
+    public class SetHookDAO
+    {
+        public string Hook { get; set; }
+    }
     [Authorize]
     [Route("api/users/[controller]")]
     [ApiController]
@@ -17,11 +21,15 @@ namespace Api.Controller
     {
 
         private readonly UserService userService;
-        public HookController(UserService userService)
+        private readonly HookService hookService;
+
+        public HookController(UserService userService, HookService hookService)
         {
             this.userService = userService;
+            this.hookService = hookService;
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetHook()
         {
             var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -29,6 +37,21 @@ namespace Api.Controller
             var user = await userService.GetUserByIdAsync(id);
 
             return Ok(user.Hook);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetHook(SetHookDAO hookDAO)
+        {
+            var id = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value;
+
+            if (!await hookService.ValidateHook(hookDAO.Hook))
+            {
+                return BadRequest();
+            }
+
+            await userService.SetUserHookAsync(id, hookDAO.Hook);
+
+            return Ok();
         }
     }
 }
